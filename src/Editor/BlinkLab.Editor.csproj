@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../NOTICES.md" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Engine/BlinkLab.Engine.csproj" />
+    <ProjectReference Include="../Engine.Rendering/BlinkLab.Engine.Rendering.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ImGui.NET" Version="1.91.6.1" />
+    <PackageReference Include="OpenTK" Version="4.9.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../res/**/*" CopyToOutputDirectory="PreserveNewest">
+      <TargetPath>res/%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
+    </None>
+    <None Include=";../Engine/**/*" Exclude="../Engine/bin/**;../Engine/obj/**" CopyToOutputDirectory="PreserveNewest">
+      <TargetPath>Engine/%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
+    </None>
+  </ItemGroup>
+</Project>
