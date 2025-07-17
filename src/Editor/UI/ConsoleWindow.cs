@@ -15,8 +15,9 @@ public class ConsoleWindow : EditorWindow
 
 	public override void Draw()
 	{
-		bool closed = false;
-		ImGui.Begin(Title, ref closed);
+		bool open = true;
+
+		ImGui.Begin(Title, ref open);
 		if (ImGui.SmallButton("Clear"))
 		{
 			logger.Clear();
@@ -29,6 +30,7 @@ public class ConsoleWindow : EditorWindow
 		}
 		ImGui.EndChild();
 		ImGui.End();
-		if (closed) { Close(); }
+
+		if (!open) { Close(); }
 	}
 }
