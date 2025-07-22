@@ -20,6 +20,9 @@ public class Project
 	{
 		try
 		{
+			logger.Info($"Name: {config.name}");
+			logger.Info($"Path: {path}");
+
 			string projectpath = Path.Combine(path, config.name);
 			Directory.CreateDirectory(projectpath);
 			Directory.CreateDirectory(Path.Combine(projectpath, "Complied"));
