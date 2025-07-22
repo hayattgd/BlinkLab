@@ -14,6 +14,10 @@ public class MenuBar : IUIElements
 				{
 					New();
 				}
+				if (ImGui.MenuItem("Load", "Ctrl+O"))
+				{
+					Load();
+				}
 				if (ImGui.MenuItem("Quit"))
 				{
 					Application.Quit();
@@ -29,11 +33,26 @@ public class MenuBar : IUIElements
 			{
 				New();
 			}
+			if (ImGui.IsKeyPressed(ImGuiKey.O))
+			{
+				Load();
+			}
 		}
 	}
 
 	public static void New()
 	{
 		Application.uiManager.AddUI(new NewProjectDialog());
+	}
+	public static void Load()
+	{
+		var dialog = new FileSelectDialog("Choose a project");
+		dialog.AfterPrompt += (path, canceled) =>
+		{
+			if (canceled) { return; }
+			Application.LoadProject(path);
+		};
+
+		Application.uiManager.AddUI(dialog);
 	}
 }

@@ -110,16 +110,21 @@ public class NewProjectDialog : EditorWindow
 
 			manager.AddUI(console);
 
-			Task.Run(async () => await Project.SetupProject(
-				new()
-				{
-					name = name
-				},
-				Path.Combine(Application.ResourcePath, "Templates", "UserScript.csproj"),
-				Path.Combine(Application.BasePath, "BlinkLab.Engine.dll"),
-				logger,
-				path
-			));
+			Task.Run(async () =>
+			{
+				await Project.SetupProject(
+					new()
+					{
+						name = name
+					},
+					Path.Combine(Application.ResourcePath, "Templates", "UserScript.csproj"),
+					Path.Combine(Application.BasePath, "BlinkLab.Engine.dll"),
+					logger,
+					path
+				);
+
+				Application.LoadProject(path);
+			});
 		}
 	}
 }
