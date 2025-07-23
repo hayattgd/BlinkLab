@@ -25,11 +25,18 @@ jobs:
         with:
           dotnet-version: ${{env.net_version}}.x
       - name: Restore dependencies
-        run: dotnet restore ./Emuratch.slnx
-      - name: Build
-        run: dotnet build --no-restore -c Release -o ./bin/build ./src/Emuratch/Emuratch.csproj
-      - name: Upload a Build Artifact
+        run: dotnet restore ./BlinkLab.sln
+      - name: Build editor
+        run: dotnet build --no-restore -c Release -o ./bin/editor ./src/Editor/BlinkLab.Editor.csproj
+      - name: Build runtime
+        run: dotnet build --no-restore -c Release -o ./bin/runtime ./src/Runtime/BlinkLab.Runtime.csproj
+      - name: Upload editor binary
         uses: actions/upload-artifact@v4.5.0
         with:
-          name: ${{ matrix.os }}
-          path: ./bin/build
+          name: ${{ matrix.os }}-editor
+          path: ./bin/editor
+      - name: Upload runtime binary
+        uses: actions/upload-artifact@v4.5.0
+        with:
+          name: ${{ matrix.os }}-runtime
+          path: ./bin/runtime
