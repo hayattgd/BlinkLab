@@ -23,7 +23,7 @@ public class Project
 			logger.Info($"Name: {config.name}");
 			logger.Info($"Path: {path}");
 
-			string projectpath = Path.Combine(path, config.name);
+			string projectpath = path;
 			Directory.CreateDirectory(projectpath);
 			Directory.CreateDirectory(Path.Combine(projectpath, "Complied"));
 			Directory.CreateDirectory(Path.Combine(projectpath, "Complied", "Assembly"));

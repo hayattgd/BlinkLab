@@ -49,6 +49,8 @@ public class NewProjectDialog : EditorWindow
 			Close();
 		}
 		ImGui.SameLine();
+
+		var finalpath = createSubFolder ? Path.Combine(path, name) : path;
 		if (ImGui.Button("Create"))
 		{
 			if (!Directory.Exists(path))
@@ -121,7 +123,7 @@ public class NewProjectDialog : EditorWindow
 					Path.Combine(Application.ResourcePath, "Templates", "UserScript.csproj"),
 					Path.Combine(Application.BasePath, "BlinkLab.Engine.dll"),
 					logger,
-					path
+					finalpath
 				);
 
 				Application.LoadProject(path);
