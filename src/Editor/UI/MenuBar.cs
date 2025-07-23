@@ -12,12 +12,19 @@ public class MenuBar : IUIElements
 
 	public struct EditorAction
 	{
-		public string name;
-		public bool ctrlKey;
-		public bool shiftKey;
-		public bool altKey;
-		public ImGuiKey key;
-		public Action function;
+		public EditorAction(bool isSeparator)
+		{
+			this.isSeparator = isSeparator;
+		}
+
+		public string name = "";
+		public bool ctrlKey = false;
+		public bool shiftKey = false;
+		public bool altKey = false;
+		public ImGuiKey key = ImGuiKey.None;
+		public Action function = () => {};
+
+		public bool isSeparator = false;
 	}
 
 	readonly Menu[] menus = [
@@ -54,7 +61,48 @@ public class MenuBar : IUIElements
 
 						Application.uiManager.AddUI(dialog);
 					}
-				}
+				},
+				new(true),
+				new()
+				{
+					name = "Quit",
+					function = Application.Quit
+				},
+			]
+		},
+		new()
+		{
+			name = "Edit",
+			actions = [
+				new()
+				{
+					name = "Undo",
+					ctrlKey = true,
+					key = ImGuiKey.Z,
+					function = () => {
+
+					}
+				},
+				new()
+				{
+					name = "Redo",
+					ctrlKey = true,
+					shiftKey = true,
+					key = ImGuiKey.Z,
+					function = () => {
+
+					}
+				},
+				new(true),
+				new()
+				{
+					name = "Preferences",
+					ctrlKey = true,
+					key = ImGuiKey.Comma,
+					function = () => {
+
+					}
+				},
 			]
 		}
 	];
@@ -69,11 +117,20 @@ public class MenuBar : IUIElements
 			{
 				foreach (var item in menu.actions)
 				{
+					if (item.isSeparator)
+					{
+						ImGui.Separator();
+						continue;
+					}
+
 					string shortcutKey = "";
-					if (item.ctrlKey) { shortcutKey += "Ctrl + "; }
-					if (item.shiftKey) { shortcutKey += "Shfit + "; }
-					if (item.altKey) { shortcutKey += "Alt + "; }
-					shortcutKey += item.key.ToString();
+					if (item.key != ImGuiKey.None)
+					{
+						if (item.ctrlKey) { shortcutKey += "Ctrl + "; }
+						if (item.shiftKey) { shortcutKey += "Shfit + "; }
+						if (item.altKey) { shortcutKey += "Alt + "; }
+						shortcutKey += item.key.ToString();
+					}
 
 					if (ImGui.MenuItem(item.name, shortcutKey))
 					{
