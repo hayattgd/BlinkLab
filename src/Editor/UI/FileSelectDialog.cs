@@ -151,7 +151,7 @@ public class FileSelectDialog : EditorWindow
 		}
 		if (!somethingselected) { selectedidx = -1; }
 		ImGui.EndChild();
-		if (ImGui.Button("Cancel"))
+		if (ImGui.Button("Cancel") || !isOpen)
 		{
 			Close();
 			AfterPrompt?.Invoke("", true);
@@ -184,11 +184,5 @@ public class FileSelectDialog : EditorWindow
 		}
 		if (!canOpenThisPath) { ImGui.EndDisabled(); }
 		ImGui.End();
-
-		if (!isOpen)
-		{
-			Close();
-			AfterPrompt?.Invoke("", true);
-		}
 	}
 }

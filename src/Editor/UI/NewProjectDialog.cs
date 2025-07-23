@@ -23,8 +23,9 @@ public class NewProjectDialog : EditorWindow
 	{
 		bool openfolderdialog = false;
 		bool create = false;
+		bool isOpen = true;
 
-		ImGui.Begin(Title);
+		ImGui.Begin(Title, ref isOpen);
 
 		ImGui.InputText("Name", ref name, byte.MaxValue);
 
@@ -42,7 +43,7 @@ public class NewProjectDialog : EditorWindow
 
 		ImGui.BeginDisabled(isDialogOpen);
 
-		if (ImGui.Button("Cancel"))
+		if (ImGui.Button("Cancel") || !isOpen)
 		{
 			Application.logger.Debug("Project creation canceled.");
 			Close();
