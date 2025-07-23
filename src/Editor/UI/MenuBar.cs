@@ -47,6 +47,11 @@ public class MenuBar : IUIElements
 	public static void Load()
 	{
 		var dialog = new FileSelectDialog("Choose a project");
+		dialog.canOpen = (path) =>
+		{
+			return File.Exists(Path.Combine(path, "UserScript.csproj"));
+		};
+
 		dialog.AfterPrompt += (path, canceled) =>
 		{
 			if (canceled) { return; }

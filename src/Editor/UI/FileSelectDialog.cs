@@ -7,14 +7,12 @@ public class FileSelectDialog : EditorWindow
 	public FileSelectDialog(string name)
 	{
 		Title = name;
-		ReloadContents();
 	}
 
 	public FileSelectDialog(string name, string path)
 	{
 		Title = name;
 		this.path = path;
-		ReloadContents();
 	}
 
 	public struct Entry
@@ -39,6 +37,15 @@ public class FileSelectDialog : EditorWindow
 	/// </summary>
 	public event Action<string, bool>? AfterPrompt;
 
+	/// <summary>
+	/// Return true if its able to open, false if not.
+	/// Leave blank if its always true.
+	/// 
+	/// string: Path
+	/// </summary>
+	public Func<string, bool>? canOpen;
+
+	bool canOpenThisPath;
 	string loadedpath = "";
 	string path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 	int selectedidx = -1;
@@ -64,6 +71,20 @@ public class FileSelectDialog : EditorWindow
 		}
 		files = fileList.ToArray();
 		loadedpath = path;
+
+		if (canOpen != null)
+		{
+			canOpenThisPath = canOpen(path);
+		}
+		else
+		{
+			canOpenThisPath = true;
+		}
+	}
+
+	public override void Start()
+	{
+		ReloadContents();
 	}
 
 	public override void Draw()
@@ -73,7 +94,7 @@ public class FileSelectDialog : EditorWindow
 		ImGui.InputText("###Path", ref path, byte.MaxValue, ImGuiInputTextFlags.ReadOnly);
 		ImGui.PopItemWidth();
 		ImGui.BeginChild("content", ImGui.GetContentRegionAvail() - new System.Numerics.Vector2(0, (ImGui.GetTextLineHeightWithSpacing() - ImGui.GetTextLineHeight()) * 2 + ImGui.GetTextLineHeight()), ImGuiChildFlags.Borders);
-		
+
 		if (path != "/" && ImGui.Selectable("(..) Parent Directory"))
 		{
 			var directories = path.Split(Path.DirectorySeparatorChar).ToList();
@@ -135,6 +156,7 @@ public class FileSelectDialog : EditorWindow
 			AfterPrompt?.Invoke("", true);
 		}
 		ImGui.SameLine();
+		if (!canOpenThisPath) { ImGui.BeginDisabled(); }
 		if (ImGui.Button("Open"))
 		{
 			Close();
@@ -159,6 +181,7 @@ public class FileSelectDialog : EditorWindow
 			Application.logger.Debug(finalpath);
 			AfterPrompt?.Invoke(finalpath, false);
 		}
+		if (!canOpenThisPath) { ImGui.EndDisabled(); }
 		ImGui.End();
 	}
 }
