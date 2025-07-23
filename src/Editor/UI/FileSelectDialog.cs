@@ -90,7 +90,7 @@ public class FileSelectDialog : EditorWindow
 	public override void Draw()
 	{
 		bool isOpen = true;
-		ImGui.Begin(Title, ref isOpen, ImGuiWindowFlags.NoScrollbar);
+		ImGui.Begin(Title, ref isOpen, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
 		ImGui.PushItemWidth(-1f);
 		ImGui.InputText("###Path", ref path, byte.MaxValue, ImGuiInputTextFlags.ReadOnly);
 		ImGui.PopItemWidth();
