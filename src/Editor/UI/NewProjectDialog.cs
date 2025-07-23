@@ -53,7 +53,11 @@ public class NewProjectDialog : EditorWindow
 		var finalpath = createSubFolder ? Path.Combine(path, name) : path;
 		if (ImGui.Button("Create"))
 		{
-			if (!Directory.Exists(path))
+			if (Directory.Exists(finalpath) && (Directory.GetDirectories(finalpath).Length > 0 || Directory.GetFiles(finalpath).Length > 0))
+			{
+				message = "Specified directory isn't empty.";
+			}
+			else if (createSubFolder && !Directory.Exists(path))
 			{
 				message = "Specified path doesn't exist.";
 			}
