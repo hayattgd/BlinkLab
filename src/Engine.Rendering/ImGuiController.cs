@@ -24,30 +24,6 @@ public class ImGuiController : IDisposable
 
 	public GameWindow window { get; private set; }
 
-	public ImGuiKey OpenTKToImGuiKey(Keys key)
-	{
-		ImGuiKey imguikey;
-		if (Enum.TryParse(key.ToString(), out imguikey))
-		{
-
-		}
-		else
-		{
-			imguikey = key switch
-			{
-				Keys.Right => ImGuiKey.RightArrow,
-				Keys.Left => ImGuiKey.LeftArrow,
-				Keys.Up => ImGuiKey.UpArrow,
-				Keys.Down => ImGuiKey.DownArrow,
-				Keys.LeftControl => ImGuiKey.LeftCtrl,
-				Keys.RightControl => ImGuiKey.RightCtrl,
-				_ => ImGuiKey.None
-			};
-		}
-
-		return imguikey;
-	}
-
 	public ImGuiController(GameWindow window)
 	{
 		nint ctx = ImGui.CreateContext();
@@ -124,12 +100,36 @@ public class ImGuiController : IDisposable
 		_projMatrixLocation = GL.GetUniformLocation(_shader.Handle, "uProjection");
 		_texLocation = GL.GetUniformLocation(_shader.Handle, "uTexture");
 	}
+	
+	public ImGuiKey OpenTKToImGuiKey(Keys key)
+	{
+		ImGuiKey imguikey;
+		if (Enum.TryParse(key.ToString(), out imguikey))
+		{
+
+		}
+		else
+		{
+			imguikey = key switch
+			{
+				Keys.Right => ImGuiKey.RightArrow,
+				Keys.Left => ImGuiKey.LeftArrow,
+				Keys.Up => ImGuiKey.UpArrow,
+				Keys.Down => ImGuiKey.DownArrow,
+				Keys.LeftControl => ImGuiKey.LeftCtrl,
+				Keys.RightControl => ImGuiKey.RightCtrl,
+				_ => ImGuiKey.None
+			};
+		}
+
+		return imguikey;
+	}
 
 	public void Update(float dt)
 	{
 		var io = ImGui.GetIO();
 		io.DisplaySize = new(window.Size.X, window.Size.Y);
-    io.DeltaTime = dt > 0.0f ? dt : 1.0f / 60.0f;
+		io.DeltaTime = dt > 0.0f ? dt : 1.0f / 60.0f;
 
 		io.AddKeyEvent(ImGuiKey.ModCtrl, window.KeyboardState.IsKeyDown(Keys.LeftControl) || window.KeyboardState.IsKeyDown(Keys.RightControl));
 		io.AddKeyEvent(ImGuiKey.ModAlt, window.KeyboardState.IsKeyDown(Keys.LeftAlt) || window.KeyboardState.IsKeyDown(Keys.RightAlt));
