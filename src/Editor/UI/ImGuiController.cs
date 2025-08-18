@@ -1,11 +1,12 @@
 using System.Reflection;
+using BlinkLab.Engine.Rendering;
 using ImGuiNET;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
-namespace BlinkLab.Engine.Rendering;
+namespace BlinkLab.Editor.UI;
 
 public class ImGuiController : IDisposable
 {
@@ -100,7 +101,7 @@ public class ImGuiController : IDisposable
 		_projMatrixLocation = GL.GetUniformLocation(_shader.Handle, "uProjection");
 		_texLocation = GL.GetUniformLocation(_shader.Handle, "uTexture");
 	}
-	
+
 	public ImGuiKey OpenTKToImGuiKey(Keys key)
 	{
 		ImGuiKey imguikey;

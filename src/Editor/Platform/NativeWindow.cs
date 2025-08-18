@@ -1,4 +1,4 @@
-using BlinkLab.Engine.Rendering;
+using BlinkLab.Editor.UI;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
