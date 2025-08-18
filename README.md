@@ -1,4 +1,5 @@
 # BlinkLab
+[![.NET Build](https://github.com/hayattgd/BlinkLab/actions/workflows/build.yml/badge.svg)](https://github.com/hayattgd/BlinkLab/actions/workflows/build.yml)
 
 A tool to quickly shape your game concepts.
 
