@@ -41,7 +41,6 @@ public static class Application
 
 	public static void Main()
 	{
-		
 		window.Run();
 		Quit();
 	}
