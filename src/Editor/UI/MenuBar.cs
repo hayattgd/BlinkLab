@@ -104,6 +104,19 @@ public class MenuBar : IUIElements
 					}
 				},
 			]
+		},
+		new()
+		{
+			name = "Window",
+			actions = [
+				new()
+				{
+					name = "Assets",
+					function = () => {
+						Application.uiManager.AddUI(new AssetsWindow());
+					}
+				},
+			]
 		}
 	];
 
