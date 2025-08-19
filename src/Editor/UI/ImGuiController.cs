@@ -92,7 +92,7 @@ public class ImGuiController : IDisposable
 
 		GL.BindVertexArray(0);
 
-		string shaderpath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? throw new Exception("Couldn't get executable path"), "res", "Shaders");
+		string shaderpath = Path.Combine(Application.ResourcePath, "Shaders");
 
 		string vertshader = File.ReadAllText(Path.Combine(shaderpath, "basic.vert"));
 		string fragshader = File.ReadAllText(Path.Combine(shaderpath, "basic.frag"));
