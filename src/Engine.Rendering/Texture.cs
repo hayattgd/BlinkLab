@@ -5,6 +5,9 @@ namespace BlinkLab.Engine.Rendering;
 
 public class Texture : IDisposable
 {
+	public int Handle { get; private set; }
+	private bool disposed;
+
 	public Texture(string path)
 	{
 		byte[] imageBytes = File.ReadAllBytes(path);
@@ -31,14 +34,6 @@ public class Texture : IDisposable
 		GL.BindTexture(TextureTarget.Texture2D, 0);
 	}
 
-	~Texture()
-	{
-		Dispose();
-	}
-
-	public int Handle { get; private set; }
-	private bool disposed;
-
 	public void Dispose()
 	{
 		if (disposed) return;
@@ -47,5 +42,10 @@ public class Texture : IDisposable
 		Handle = 0;
 		GC.SuppressFinalize(this);
 		disposed = true;
+	}
+
+	~Texture()
+	{
+		Dispose();
 	}
 }
