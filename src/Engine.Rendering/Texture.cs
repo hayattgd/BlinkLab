@@ -31,6 +31,9 @@ public class Texture : IDisposable
 			image.Data
 		);
 
+		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+
 		GL.BindTexture(TextureTarget.Texture2D, 0);
 
 		ErrorHandler.CatchError();
