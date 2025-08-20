@@ -8,12 +8,10 @@ public class Texture : IDisposable
 	public int Handle { get; private set; }
 	private bool disposed;
 
-	public Texture(string path)
+	private Texture(byte[] bytes)
 	{
-		byte[] imageBytes = File.ReadAllBytes(path);
-
 		ImageResult image;
-		using var str = new MemoryStream(imageBytes);
+		using var str = new MemoryStream(bytes);
 		image = ImageResult.FromStream(str, ColorComponents.RedGreenBlueAlpha);
 
 		Handle = GL.GenTexture();
@@ -38,6 +36,11 @@ public class Texture : IDisposable
 
 		ErrorHandler.CatchError();
 	}
+
+	public static Texture LoadTexture(string path)
+	{
+		byte[] imageBytes = File.ReadAllBytes(path);
+		return new(imageBytes);
 	}
 
 	public void Dispose()
