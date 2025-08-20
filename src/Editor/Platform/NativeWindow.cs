@@ -1,4 +1,5 @@
 using BlinkLab.Editor.UI;
+using BlinkLab.Engine.Rendering;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
@@ -37,8 +38,7 @@ public class NativeWindow : GameWindow
 		imGuiController.Render();
 		SwapBuffers();
 
-		var err = GL.GetError();
-		if (err != ErrorCode.NoError) { Console.WriteLine($"OpenGL Error: {err}"); }
+		ErrorHandler.CatchError();
 	}
 
 	public override void Dispose()

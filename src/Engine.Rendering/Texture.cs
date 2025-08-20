@@ -32,6 +32,9 @@ public class Texture : IDisposable
 		);
 
 		GL.BindTexture(TextureTarget.Texture2D, 0);
+
+		ErrorHandler.CatchError();
+	}
 	}
 
 	public void Dispose()
