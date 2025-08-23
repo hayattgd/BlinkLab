@@ -25,6 +25,8 @@ public static class Application
 		public string newProjectPath;
 	}
 
+	public static string ProjectPath => Project?.path ?? HomeDirectory;
+	public static string HomeDirectory => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 	public static string BasePath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? throw new Exception("Couldn't get executable path");
 
 	public static string ConfigPath => Path.Combine(BasePath, "config.json");
