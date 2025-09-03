@@ -117,6 +117,7 @@ public class MenuBar : IUIElements
 						{
 							dontCloseAfterPrompt = true,
 							noPrompt = true,
+							openFileInApp = true,
 							mode = FileSelectDialog.FileSelectMode.Both
 						}));
 					}

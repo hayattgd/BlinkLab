@@ -1,3 +1,4 @@
+using BlinkLab.Editor.Platform;
 using BlinkLab.Engine.Rendering;
 using ImGuiNET;
 
@@ -48,7 +49,7 @@ public class FileSelectDialog : EditorWindow
 		public bool noPrompt;
 		public bool openFileInApp;
 
-		public bool ShowFile => mode == FileSelectMode.OnlyFile || mode == FileSelectMode.Both;
+		public readonly bool ShowFile => (mode == FileSelectMode.OnlyFile) || (mode == FileSelectMode.Both);
 	}
 
 	public enum FileSelectMode
@@ -96,7 +97,7 @@ public class FileSelectDialog : EditorWindow
 		}
 		directories = directoryList.ToArray();
 
-		if (!opt.ShowFile)
+		if (opt.ShowFile)
 		{
 			List<Entry> fileList = [];
 			foreach (var file in Directory.GetFiles(path))
@@ -163,6 +164,7 @@ public class FileSelectDialog : EditorWindow
 
 		bool somethingselected = false;
 		bool opened = false;
+		bool reloadlater = false;
 		try
 		{
 			for (int i = 0; i < directories.Length; i++)
@@ -182,7 +184,9 @@ public class FileSelectDialog : EditorWindow
 					if (previouslySelected && !selected)
 					{
 						path = $"{directories[i].path}";
-						ReloadContents();
+						somethingselected = true;
+						selectedidx = i;
+						reloadlater = true;
 					}
 				}
 
@@ -192,7 +196,7 @@ public class FileSelectDialog : EditorWindow
 					somethingselected = true;
 				}
 			}
-			if (!opt.ShowFile)
+			if (opt.ShowFile)
 			{
 				for (int i = 0; i < files.Length; i++)
 				{
@@ -211,7 +215,7 @@ public class FileSelectDialog : EditorWindow
 					{
 						icon = GetIconFromExtension("");
 					}
-					
+
 					ImGui.Image(icon.Handle, new(ImGui.GetTextLineHeight()));
 					ImGui.SameLine();
 					ImGui.SetCursorPosX(cursorX);
@@ -221,6 +225,8 @@ public class FileSelectDialog : EditorWindow
 						if (previouslySelected && !selected)
 						{
 							opened = true;
+							somethingselected = true;
+							selectedidx = i + directories.Length;
 						}
 					}
 
@@ -259,7 +265,7 @@ public class FileSelectDialog : EditorWindow
 			string finalpath;
 			if (selectedidx >= 0)
 			{
-				if (selectedidx > directories.Length)
+				if (selectedidx >= directories.Length)
 				{
 					finalpath = files[selectedidx - directories.Length].path;
 				}
@@ -274,7 +280,16 @@ public class FileSelectDialog : EditorWindow
 			}
 
 			Application.logger.Debug(finalpath);
+			if (opt.openFileInApp)
+			{
+				NativeApplication.OpenFile(finalpath);
+			}
 			AfterPrompt?.Invoke(finalpath, false);
+		}
+
+		if (reloadlater)
+		{
+			ReloadContents();
 		}
 		
 		if (canceled || !isOpen)

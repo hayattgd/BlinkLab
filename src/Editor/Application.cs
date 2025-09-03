@@ -10,19 +10,24 @@ namespace BlinkLab.Editor;
 
 public static class Application
 {
+	[Serializable]
 	public struct Config
 	{
+		public Config() {}
+
 		public enum Theme
 		{
 			Dark,
 			Light
 		}
 
-		public Theme theme;
-		public string fontPath;
-		public int fontSize;
+		public Theme theme { get; set; } = Theme.Dark;
+		public string fontPath { get; set; } = "/usr/share/fonts/TTF/OpenSans-Regular.ttf";
+		public int fontSize { get; set; } = 20;
 
-		public string newProjectPath;
+		public string newProjectPath { get; set; } = HomeDirectory;
+
+		public string editorCommandLine { get; set; } = "code";
 	}
 
 	public static string ProjectPath => Project?.path ?? HomeDirectory;
@@ -43,6 +48,7 @@ public static class Application
 
 	public static void Main()
 	{
+		LoadConfig();
 		window.Run();
 		Quit();
 	}
@@ -61,6 +67,7 @@ public static class Application
 		if (!File.Exists(ConfigPath))
 		{
 			File.Create(ConfigPath).Dispose();
+			Configuration = new();
 			json = SaveConfig();
 		}
 		else
@@ -94,6 +101,7 @@ public static class Application
 	{
 		window.Close();
 		window.Dispose();
+		SaveConfig();
 		Environment.Exit(0);
 	}
 }
