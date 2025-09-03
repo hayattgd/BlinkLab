@@ -200,21 +200,21 @@ public class FileSelectDialog : EditorWindow
 					bool previouslySelected = selectedidx == i + directories.Length;
 					bool selected = previouslySelected;
 
-				float cursorX = ImGui.GetCursorPosX();
-				Texture icon;
-				if (files[i].Name.Contains('.'))
-				{
-					string ext = files[i].Name.Split('.')[^1];
-					icon = GetIconFromExtension(ext);
-				}
-				else
-				{
-					icon = GetIconFromExtension("");
-				}
-				
-				ImGui.Image(icon.Handle, new(ImGui.GetTextLineHeight()));
-				ImGui.SameLine();
-				ImGui.SetCursorPosX(cursorX);
+					float cursorX = ImGui.GetCursorPosX();
+					Texture icon;
+					if (files[i].Name.Contains('.'))
+					{
+						string ext = files[i].Name.Split('.')[^1];
+						icon = GetIconFromExtension(ext);
+					}
+					else
+					{
+						icon = GetIconFromExtension("");
+					}
+					
+					ImGui.Image(icon.Handle, new(ImGui.GetTextLineHeight()));
+					ImGui.SameLine();
+					ImGui.SetCursorPosX(cursorX);
 
 					if (ImGui.Selectable($"      {files[i].Name}", ref selected))
 					{
