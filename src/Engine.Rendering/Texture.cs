@@ -31,10 +31,22 @@ public class Texture : IDisposable
 
 		ErrorHandler.CatchGLError();
 	}
+
+	public static Texture LoadTexture(string path) => LoadTexture(path, TextureMinFilter.Linear, TextureMagFilter.Linear, true);
+
 	public static Texture LoadTexture(string path, TextureMinFilter minFilter, TextureMagFilter magFilter, bool mipmap)
 	{
 		byte[] imageBytes = File.ReadAllBytes(path);
-		return new(imageBytes);
+		var tex = new Texture(imageBytes);
+
+		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)minFilter);
+		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)magFilter);
+
+		if (mipmap) { GL.GenerateMipmap(GenerateMipmapTarget.Texture2D); }
+
+		GL.BindTexture(TextureTarget.Texture2D, 0);
+
+		return tex;
 	}
 
 	public void Dispose()
