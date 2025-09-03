@@ -4,7 +4,7 @@ namespace BlinkLab.Engine.Rendering;
 
 public static class ErrorHandler
 {
-	public static void CatchError()
+	public static void CatchGLError()
 	{
 		var err = GL.GetError();
 		if (err != ErrorCode.NoError) { Console.WriteLine($"OpenGL Error: {err}"); }

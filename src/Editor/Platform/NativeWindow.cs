@@ -38,7 +38,7 @@ public class NativeWindow : GameWindow
 		imGuiController.Render();
 		SwapBuffers();
 
-		ErrorHandler.CatchError();
+		ErrorHandler.CatchGLError();
 	}
 
 	public override void Dispose()

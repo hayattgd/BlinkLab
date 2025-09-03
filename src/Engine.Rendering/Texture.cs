@@ -29,15 +29,9 @@ public class Texture : IDisposable
 			image.Data
 		);
 
-		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-
-		GL.BindTexture(TextureTarget.Texture2D, 0);
-
-		ErrorHandler.CatchError();
+		ErrorHandler.CatchGLError();
 	}
-
-	public static Texture LoadTexture(string path)
+	public static Texture LoadTexture(string path, TextureMinFilter minFilter, TextureMagFilter magFilter, bool mipmap)
 	{
 		byte[] imageBytes = File.ReadAllBytes(path);
 		return new(imageBytes);
