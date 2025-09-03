@@ -113,7 +113,12 @@ public class MenuBar : IUIElements
 				{
 					name = "Assets",
 					function = () => {
-						Application.uiManager.AddUI(new AssetsWindow());
+						Application.uiManager.AddUI(new FileSelectDialog("Assets", Application.ProjectPath,  new FileSelectDialog.Option()
+						{
+							dontCloseAfterPrompt = true,
+							noPrompt = true,
+							mode = FileSelectDialog.FileSelectMode.Both
+						}));
 					}
 				},
 			]

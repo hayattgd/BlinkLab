@@ -1,9 +1,15 @@
+using BlinkLab.Engine.Rendering;
 using ImGuiNET;
 
 namespace BlinkLab.Editor.UI;
 
 public class FileSelectDialog : EditorWindow
 {
+	public FileSelectDialog()
+	{
+		Title = "Choose path";
+	}
+
 	public FileSelectDialog(string name)
 	{
 		Title = name;
@@ -13,6 +19,13 @@ public class FileSelectDialog : EditorWindow
 	{
 		Title = name;
 		this.path = path;
+	}
+
+	public FileSelectDialog(string name, string path, Option opt)
+	{
+		Title = name;
+		this.path = path;
+		this.opt = opt;
 	}
 
 	public struct Entry
@@ -25,12 +38,26 @@ public class FileSelectDialog : EditorWindow
 	{
 		public Option()
 		{
-			OnlyDirectory = false;
+			mode = FileSelectMode.OnlyFile;
+			dontCloseAfterPrompt = false;
+			noPrompt = false;
 		}
 
-		public bool OnlyDirectory;
+		public FileSelectMode mode;
+		public bool dontCloseAfterPrompt;
+		public bool noPrompt;
+		public bool openFileInApp;
+
+		public bool ShowFile => mode == FileSelectMode.OnlyFile || mode == FileSelectMode.Both;
 	}
-	
+
+	public enum FileSelectMode
+	{
+		OnlyDirectory,
+		OnlyFile,
+		Both
+	}
+
 	/// <summary>
 	/// string: Path,
 	/// bool: Canceled
@@ -47,11 +74,16 @@ public class FileSelectDialog : EditorWindow
 
 	bool canOpenThisPath;
 	string loadedpath = "";
-	string path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+	string path = Application.ProjectPath;
 	int selectedidx = -1;
+
+	public Option opt;
 
 	Entry[] directories = [];
 	Entry[] files = [];
+
+	private static Texture? folderIcon;
+	private readonly static Dictionary<string, Texture> fileIcons = [];
 
 	private void ReloadContents()
 	{
@@ -64,13 +96,16 @@ public class FileSelectDialog : EditorWindow
 		}
 		directories = directoryList.ToArray();
 
-		List<Entry> fileList = [];
-		foreach (var file in Directory.GetFiles(path))
+		if (!opt.ShowFile)
 		{
-			fileList.Add(new() { path = file });
+			List<Entry> fileList = [];
+			foreach (var file in Directory.GetFiles(path))
+			{
+				fileList.Add(new() { path = file });
+			}
+			files = fileList.ToArray();
+			loadedpath = path;
 		}
-		files = fileList.ToArray();
-		loadedpath = path;
 
 		if (canOpen != null)
 		{
@@ -82,8 +117,28 @@ public class FileSelectDialog : EditorWindow
 		}
 	}
 
+	private static Texture LoadIcon(string key, string path)
+	{
+		if (fileIcons.TryGetValue(key, out Texture? tex)) { return tex; }
+
+		tex = Texture.LoadTexture(path);
+		fileIcons.Add(key, tex);
+		return tex;
+	}
+
+	public Texture GetIconFromExtension(string ext) => ext switch
+	{
+		"sh" => LoadIcon(ext, Path.Combine(Application.ResourcePath, "Icons", "ShellScript.png")),
+		"bat" => LoadIcon(ext, Path.Combine(Application.ResourcePath, "Icons", "ShellScript.png")),
+		"cmd" => LoadIcon(ext, Path.Combine(Application.ResourcePath, "Icons", "ShellScript.png")),
+		"cs" => LoadIcon(ext, Path.Combine(Application.ResourcePath, "Icons", "Script.png")),
+		_ => LoadIcon(ext, Path.Combine(Application.ResourcePath, "Icons", "File.png"))
+	};
+
 	public override void Start()
 	{
+		folderIcon ??= Texture.LoadTexture(Path.Combine(Application.ResourcePath, "Icons", "Folder.png"));
+
 		ReloadContents();
 	}
 
@@ -94,7 +149,7 @@ public class FileSelectDialog : EditorWindow
 		ImGui.PushItemWidth(-1f);
 		ImGui.InputText("###Path", ref path, byte.MaxValue, ImGuiInputTextFlags.ReadOnly);
 		ImGui.PopItemWidth();
-		ImGui.BeginChild("content", ImGui.GetContentRegionAvail() - new System.Numerics.Vector2(0, (ImGui.GetTextLineHeightWithSpacing() - ImGui.GetTextLineHeight()) * 2 + ImGui.GetTextLineHeight()), ImGuiChildFlags.Borders);
+		ImGui.BeginChild("content", ImGui.GetContentRegionAvail() - new System.Numerics.Vector2(0, !opt.noPrompt ? (ImGui.GetTextLineHeightWithSpacing() - ImGui.GetTextLineHeight()) * 2 + ImGui.GetTextLineHeight() : 0), ImGuiChildFlags.Borders);
 
 		if (path != "/" && ImGui.Selectable("(..) Parent Directory"))
 		{
@@ -107,6 +162,7 @@ public class FileSelectDialog : EditorWindow
 		}
 
 		bool somethingselected = false;
+		bool opened = false;
 		try
 		{
 			for (int i = 0; i < directories.Length; i++)
@@ -114,7 +170,14 @@ public class FileSelectDialog : EditorWindow
 				if (directories[i].Name[0] == '.') { continue; }
 				bool previouslySelected = selectedidx == i;
 				bool selected = previouslySelected;
-				if (ImGui.Selectable($"{directories[i].Name}{Path.DirectorySeparatorChar}", ref selected))
+
+				float cursorX = ImGui.GetCursorPosX();
+				string ext = directories[i].Name.Split('.')[^1];
+				ImGui.Image(folderIcon?.Handle ?? throw new Exception("Icon didn't loaded properly."), new(ImGui.GetTextLineHeight()));
+				ImGui.SameLine();
+				ImGui.SetCursorPosX(cursorX);
+
+				if (ImGui.Selectable($"      {directories[i].Name}{Path.DirectorySeparatorChar}", ref selected))
 				{
 					if (previouslySelected && !selected)
 					{
@@ -129,17 +192,43 @@ public class FileSelectDialog : EditorWindow
 					somethingselected = true;
 				}
 			}
-			for (int i = 0; i < files.Length; i++)
+			if (!opt.ShowFile)
 			{
-				if (files[i].Name[0] == '.') { continue; }
-				bool selected = selectedidx == i + directories.Length;
-
-				ImGui.Selectable($"{files[i].Name}", ref selected);
-
-				if (selected)
+				for (int i = 0; i < files.Length; i++)
 				{
-					selectedidx = i + directories.Length;
-					somethingselected = true;
+					if (files[i].Name[0] == '.') { continue; }
+					bool previouslySelected = selectedidx == i + directories.Length;
+					bool selected = previouslySelected;
+
+				float cursorX = ImGui.GetCursorPosX();
+				Texture icon;
+				if (files[i].Name.Contains('.'))
+				{
+					string ext = files[i].Name.Split('.')[^1];
+					icon = GetIconFromExtension(ext);
+				}
+				else
+				{
+					icon = GetIconFromExtension("");
+				}
+				
+				ImGui.Image(icon.Handle, new(ImGui.GetTextLineHeight()));
+				ImGui.SameLine();
+				ImGui.SetCursorPosX(cursorX);
+
+					if (ImGui.Selectable($"      {files[i].Name}", ref selected))
+					{
+						if (previouslySelected && !selected)
+						{
+							opened = true;
+						}
+					}
+
+					if (selected)
+					{
+						selectedidx = i + directories.Length;
+						somethingselected = true;
+					}
 				}
 			}
 		}
@@ -151,16 +240,21 @@ public class FileSelectDialog : EditorWindow
 		}
 		if (!somethingselected) { selectedidx = -1; }
 		ImGui.EndChild();
-		if (ImGui.Button("Cancel") || !isOpen)
+		bool canceled = false;
+		if (!opt.noPrompt)
 		{
-			Close();
-			AfterPrompt?.Invoke("", true);
+			canceled = ImGui.Button("Cancel");
+			ImGui.SameLine();
+			if (!canOpenThisPath) { ImGui.BeginDisabled(); }
+			if (ImGui.Button("Open"))
+			{
+				opened = true;
+			}
 		}
-		ImGui.SameLine();
-		if (!canOpenThisPath) { ImGui.BeginDisabled(); }
-		if (ImGui.Button("Open"))
+
+		if (opened)
 		{
-			Close();
+			if (!opt.dontCloseAfterPrompt) { Close(); }
 
 			string finalpath;
 			if (selectedidx >= 0)
@@ -182,6 +276,13 @@ public class FileSelectDialog : EditorWindow
 			Application.logger.Debug(finalpath);
 			AfterPrompt?.Invoke(finalpath, false);
 		}
+		
+		if (canceled || !isOpen)
+			{
+				Close();
+				AfterPrompt?.Invoke("", true);
+			}
+
 		if (!canOpenThisPath) { ImGui.EndDisabled(); }
 		ImGui.End();
 	}
