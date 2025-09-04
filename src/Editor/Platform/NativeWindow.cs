@@ -28,7 +28,7 @@ public class NativeWindow : GameWindow
 	protected override void OnRenderFrame(FrameEventArgs args)
 	{
 		base.OnRenderFrame(args);
-		GL.Viewport(0, 0, Size.X, Size.Y);
+		GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
 		GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 		imGuiController.Update((float)args.Time);

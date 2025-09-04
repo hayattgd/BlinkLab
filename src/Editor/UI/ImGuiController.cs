@@ -129,7 +129,7 @@ public class ImGuiController : IDisposable
 	public void Update(float dt)
 	{
 		var io = ImGui.GetIO();
-		io.DisplaySize = new(window.Size.X, window.Size.Y);
+		io.DisplaySize = new(window.ClientSize.X, window.ClientSize.Y);
 		io.DeltaTime = dt > 0.0f ? dt : 1.0f / 60.0f;
 
 		io.AddKeyEvent(ImGuiKey.ModCtrl, window.KeyboardState.IsKeyDown(Keys.LeftControl) || window.KeyboardState.IsKeyDown(Keys.RightControl));
