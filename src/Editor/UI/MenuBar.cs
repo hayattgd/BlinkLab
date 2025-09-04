@@ -47,7 +47,7 @@ public class MenuBar : IUIElements
 					ctrlKey = true,
 					key = ImGuiKey.O,
 					function = () => {
-						var dialog = new FileSelectDialog("Choose a project");
+						var dialog = new FileSelectDialog("Choose a project", Application.Configuration.loadProjectPath);
 						dialog.canOpen = (path) =>
 						{
 							return File.Exists(Path.Combine(path, "UserScript.csproj"));
@@ -56,6 +56,7 @@ public class MenuBar : IUIElements
 						dialog.AfterPrompt += (path, canceled) =>
 						{
 							if (canceled) { return; }
+							Application.Configuration.UpdateNewProjectPath(path);
 							Application.LoadProject(path);
 						};
 

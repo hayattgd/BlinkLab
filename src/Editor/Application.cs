@@ -20,6 +20,7 @@ public static class Application
 			fontPath = DefaultFont;
 			fontSize = 20;
 			newProjectPath = HomeDirectory;
+			loadProjectPath = HomeDirectory;
 			editorCommandLine = "code";
 		}
 
@@ -34,8 +35,19 @@ public static class Application
 		public int fontSize { get; set; }
 
 		public string newProjectPath { get; set; }
+		public string loadProjectPath { get; set; }
 
 		public string editorCommandLine { get; set; }
+
+		public void UpdateNewProjectPath(string path)
+		{
+			newProjectPath = path;
+		}
+
+		public void UpdateLoadProjectPath(string path)
+		{
+			loadProjectPath = path;
+		}
 	}
 
 	public static string DefaultFont

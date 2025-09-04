@@ -12,9 +12,9 @@ public class NewProjectDialog : EditorWindow
 		Title = "New Project";
 	}
 
-	string path = "";
-	string name = "";
-	bool createSubFolder = false;
+	string path = Application.Configuration.newProjectPath;
+	string name = "Project";
+	bool createSubFolder = true;
 
 	string message = "";
 	bool isDialogOpen = false;
@@ -110,6 +110,8 @@ public class NewProjectDialog : EditorWindow
 		if (create)
 		{
 			if (manager == null) { throw new NullReferenceException(); }
+
+			Application.Configuration.UpdateNewProjectPath(finalpath);
 
 			Logger logger = new("Project");
 
