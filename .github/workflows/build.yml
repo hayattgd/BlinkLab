@@ -35,8 +35,8 @@ jobs:
         with:
           name: ${{ matrix.os }}-editor
           path: ./bin/editor
-      - name: Upload runtime binary
-        uses: actions/upload-artifact@v4.5.0
-        with:
-          name: ${{ matrix.os }}-runtime
-          path: ./bin/runtime
+      # - name: Upload runtime binary
+      #   uses: actions/upload-artifact@v4.5.0
+      #   with:
+      #     name: ${{ matrix.os }}-runtime
+      #     path: ./bin/runtime
