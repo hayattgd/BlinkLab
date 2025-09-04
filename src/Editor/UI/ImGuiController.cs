@@ -54,7 +54,7 @@ public class ImGuiController : IDisposable
 			io.AddKeyEvent(OpenTKToImGuiKey(e.Key), false);
 		};
 
-		io.Fonts.AddFontFromFileTTF("/usr/share/fonts/TTF/OpenSans-Regular.ttf", 20);
+		io.Fonts.AddFontFromFileTTF(Application.Configuration.fontPath, Application.Configuration.fontSize);
 		io.Fonts.AddFontDefault();
 		io.Fonts.Build();
 
