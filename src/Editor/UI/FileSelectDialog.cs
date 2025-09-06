@@ -279,7 +279,6 @@ public class FileSelectDialog : EditorWindow
 				finalpath = path;
 			}
 
-			Application.logger.Debug(finalpath);
 			if (opt.openFileInApp)
 			{
 				NativeApplication.OpenFile(finalpath);
