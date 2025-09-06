@@ -10,13 +10,8 @@ public class MenuBar : IUIElements
 		public EditorAction[] actions;
 	}
 
-	public struct EditorAction
+	public struct EditorAction(bool isSeparator)
 	{
-		public EditorAction(bool isSeparator)
-		{
-			this.isSeparator = isSeparator;
-		}
-
 		public string name = "";
 		public bool ctrlKey = false;
 		public bool shiftKey = false;
@@ -24,7 +19,7 @@ public class MenuBar : IUIElements
 		public ImGuiKey key = ImGuiKey.None;
 		public Action function = () => {};
 
-		public bool isSeparator = false;
+		public bool isSeparator = isSeparator;
 	}
 
 	readonly Menu[] menus = [
