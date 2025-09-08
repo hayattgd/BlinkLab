@@ -10,6 +10,7 @@ public struct Vector3
 	}
 
 	public Vector3(float x, float y) : this(x, y, 0) { }
+	public Vector3(Vector2 vec, float z) : this(vec.x, vec.y, z) { }
 	/// <summary>
 	/// Returns new(value, value, value)
 	/// </summary>
