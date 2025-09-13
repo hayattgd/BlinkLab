@@ -32,9 +32,7 @@ public class MenuBar : IUIElements
 					name = "New",
 					ctrlKey = true,
 					key = ImGuiKey.N,
-					function = () => {
-						Application.uiManager.AddUI(new NewProjectDialog());
-					}
+					function = () => Application.uiManager.AddUI(new NewProjectDialog())
 				},
 				new()
 				{
@@ -108,15 +106,14 @@ public class MenuBar : IUIElements
 				new()
 				{
 					name = "Assets",
-					function = () => {
-						Application.uiManager.AddUI(new FileSelectDialog("Assets", Application.ProjectPath,  new FileSelectDialog.Option()
+					function = () =>
+						Application.uiManager.AddUI(new FileSelectDialog("Assets", Application.ProjectPath, new FileSelectDialog.Option()
 						{
 							dontCloseAfterPrompt = true,
 							noPrompt = true,
 							openFileInApp = true,
 							mode = FileSelectDialog.FileSelectMode.Both
-						}));
-					}
+						}))
 				},
 			]
 		}
