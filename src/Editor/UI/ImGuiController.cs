@@ -22,7 +22,7 @@ public class ImGuiController : IDisposable
 	private int _projMatrixLocation;
 	private int _texLocation;
 
-	public GameWindow window { get; private set; }
+	public GameWindow Window { get; private set; }
 
 	public ImGuiController(GameWindow window)
 	{
@@ -35,7 +35,7 @@ public class ImGuiController : IDisposable
 		io.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
 		io.ConfigDockingAlwaysTabBar = true;
 
-		this.window = window;
+		Window = window;
 		window.MouseWheel += (e) =>
 		{
 			io.MouseWheel = e.OffsetY;
@@ -128,19 +128,19 @@ public class ImGuiController : IDisposable
 	public void Update(float dt)
 	{
 		var io = ImGui.GetIO();
-		io.DisplaySize = new(window.ClientSize.X, window.ClientSize.Y);
+		io.DisplaySize = new(Window.ClientSize.X, Window.ClientSize.Y);
 		io.DeltaTime = dt > 0.0f ? dt : 1.0f / 60.0f;
 
-		io.AddKeyEvent(ImGuiKey.ModCtrl, window.KeyboardState.IsKeyDown(Keys.LeftControl) || window.KeyboardState.IsKeyDown(Keys.RightControl));
-		io.AddKeyEvent(ImGuiKey.ModAlt, window.KeyboardState.IsKeyDown(Keys.LeftAlt) || window.KeyboardState.IsKeyDown(Keys.RightAlt));
-		io.AddKeyEvent(ImGuiKey.ModShift, window.KeyboardState.IsKeyDown(Keys.LeftShift) || window.KeyboardState.IsKeyDown(Keys.RightShift));
-		io.AddKeyEvent(ImGuiKey.ModSuper, window.KeyboardState.IsKeyDown(Keys.LeftSuper) || window.KeyboardState.IsKeyDown(Keys.RightSuper));
+		io.AddKeyEvent(ImGuiKey.ModCtrl, Window.KeyboardState.IsKeyDown(Keys.LeftControl) || Window.KeyboardState.IsKeyDown(Keys.RightControl));
+		io.AddKeyEvent(ImGuiKey.ModAlt, Window.KeyboardState.IsKeyDown(Keys.LeftAlt) || Window.KeyboardState.IsKeyDown(Keys.RightAlt));
+		io.AddKeyEvent(ImGuiKey.ModShift, Window.KeyboardState.IsKeyDown(Keys.LeftShift) || Window.KeyboardState.IsKeyDown(Keys.RightShift));
+		io.AddKeyEvent(ImGuiKey.ModSuper, Window.KeyboardState.IsKeyDown(Keys.LeftSuper) || Window.KeyboardState.IsKeyDown(Keys.RightSuper));
 
-		io.MouseDown[0] = window.IsMouseButtonDown(MouseButton.Left);
-		io.MouseDown[1] = window.IsMouseButtonDown(MouseButton.Right);
-		io.MouseDown[2] = window.IsMouseButtonDown(MouseButton.Middle);
+		io.MouseDown[0] = Window.IsMouseButtonDown(MouseButton.Left);
+		io.MouseDown[1] = Window.IsMouseButtonDown(MouseButton.Right);
+		io.MouseDown[2] = Window.IsMouseButtonDown(MouseButton.Middle);
 
-		io.MousePos = new(window.MousePosition.X, window.MousePosition.Y);
+		io.MousePos = new(Window.MousePosition.X, Window.MousePosition.Y);
 
 		CursorShape shape = ImGui.GetMouseCursor() switch
 		{
@@ -158,7 +158,7 @@ public class ImGuiController : IDisposable
 		unsafe
 		{
 			var cursor = GLFW.CreateStandardCursor(shape);
-			GLFW.SetCursor(window.WindowPtr, cursor);
+			GLFW.SetCursor(Window.WindowPtr, cursor);
 		}
 
 		ImGui.NewFrame();
