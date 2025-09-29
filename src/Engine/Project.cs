@@ -9,10 +9,15 @@ public class Project
 	public string path;
 	public Entity Root => _root;
 	public readonly static Logger logger = new("Player");
+	public static Project? LoadedProject => _loadedProject;
+
+	private static Project? _loadedProject;
 	private readonly Entity _root = new("root");
+
 	public Project(string path)
 	{
 		this.path = path;
+		_loadedProject = this;
 	}
 
 	public struct ProjectConfig
@@ -80,10 +85,4 @@ public class Project
 		await proc.WaitForExitAsync();
 		if (proc.ExitCode != 0) { throw new Exception($"Execution of dotnet CLI failed ({proc.ExitCode})"); }
 	}
-
-	public string path;
-
-	private readonly Entity _root = new("root");
-	public Entity Root => _root;
-	public readonly static Logger logger = new("Player");
 }

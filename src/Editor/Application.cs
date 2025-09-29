@@ -93,6 +93,7 @@ public static class Application
 	public readonly static Logger logger = new("Editor");
 
 	public static Project? Project { get; private set; }
+	public static bool IsProjectLoaded => Project != null;
 	private static NativeWindow? window;
 	internal static readonly UIManager uiManager = new();
 	private static readonly MenuBar menuBar = new();

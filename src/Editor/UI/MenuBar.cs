@@ -115,6 +115,11 @@ public class MenuBar : IUIElements
 							mode = FileSelectDialog.FileSelectMode.Both
 						}))
 				},
+				new()
+				{
+					name = "Structure",
+					function = () => Application.uiManager.AddUI(new StructureWindow())
+				},
 			]
 		}
 	];
