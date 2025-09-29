@@ -6,6 +6,10 @@ namespace BlinkLab.Engine;
 
 public class Project
 {
+	public string path;
+	public Entity Root => _root;
+	public readonly static Logger logger = new("Player");
+	private readonly Entity _root = new("root");
 	public Project(string path)
 	{
 		this.path = path;
