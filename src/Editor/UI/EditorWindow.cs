@@ -1,5 +1,3 @@
-using System.Data.Common;
-
 namespace BlinkLab.Editor.UI;
 
 public abstract class EditorWindow : IUIElements
