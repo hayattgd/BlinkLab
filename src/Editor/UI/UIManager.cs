@@ -1,3 +1,5 @@
+using ImGuiNET;
+
 namespace BlinkLab.Editor.UI;
 
 public class UIManager
@@ -8,11 +10,13 @@ public class UIManager
 
 	public void Update()
 	{
-		foreach (var ui in uis)
+		for (int i=0; i<uis.Count; i++)
 		{
 			try
 			{
-				ui.Draw();
+				ImGui.PushID(i);
+				uis[i].Draw();
+				ImGui.PopID();
 			}
 			catch (Exception ex)
 			{
