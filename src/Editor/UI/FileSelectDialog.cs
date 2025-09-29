@@ -294,10 +294,10 @@ public class FileSelectDialog : EditorWindow
 		}
 		
 		if (canceled || !isOpen)
-			{
-				Close();
-				AfterPrompt?.Invoke("", true);
-			}
+		{
+			Close();
+			AfterPrompt?.Invoke("", true);
+		}
 		ImGui.End();
 	}
 }
