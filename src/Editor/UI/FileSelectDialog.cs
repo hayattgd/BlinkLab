@@ -258,6 +258,8 @@ public class FileSelectDialog : EditorWindow
 			}
 		}
 
+		if (!canOpenThisPath) { ImGui.EndDisabled(); }
+
 		if (opened)
 		{
 			if (!opt.dontCloseAfterPrompt) { Close(); }
@@ -296,8 +298,6 @@ public class FileSelectDialog : EditorWindow
 				Close();
 				AfterPrompt?.Invoke("", true);
 			}
-
-		if (!canOpenThisPath) { ImGui.EndDisabled(); }
 		ImGui.End();
 	}
 }
