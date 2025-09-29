@@ -141,6 +141,7 @@ public static class Application
 
 	public static void Update(FrameEventArgs args)
 	{
+		DockSpace.Draw();
 		uiManager.Update();
 		menuBar.Draw();
 	}
