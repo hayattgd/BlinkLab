@@ -1,3 +1,5 @@
+using System.Data.Common;
+
 namespace BlinkLab.Editor.UI;
 
 public abstract class EditorWindow : IUIElements
@@ -12,7 +14,9 @@ public abstract class EditorWindow : IUIElements
 		manager.CloseWindow(this);
 	}
 
-	public abstract void Draw();
+	public void Draw() { Draw(-1); }
+
+	public abstract void Draw(int id);
 
 	public virtual void Start() { }
 	public virtual void Closing() { }

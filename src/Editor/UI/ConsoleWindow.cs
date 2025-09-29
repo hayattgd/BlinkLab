@@ -13,11 +13,11 @@ public class ConsoleWindow : EditorWindow
 
 	public Logger logger;
 
-	public override void Draw()
+	public override void Draw(int id)
 	{
 		bool open = true;
 
-		ImGui.Begin(Title, ref open);
+		ImGui.Begin($"{Title}##{id}", ref open);
 		if (ImGui.SmallButton("Clear"))
 		{
 			logger.Clear();

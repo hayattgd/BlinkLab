@@ -15,7 +15,14 @@ public class UIManager
 			try
 			{
 				ImGui.PushID(i);
-				uis[i].Draw();
+				if (uis[i] is EditorWindow window)
+				{
+					window.Draw(i);
+				}
+				else
+				{
+					uis[i].Draw();
+				}
 				ImGui.PopID();
 			}
 			catch (Exception ex)

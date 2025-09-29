@@ -19,13 +19,13 @@ public class NewProjectDialog : EditorWindow
 	string message = "";
 	bool isDialogOpen = false;
 
-	public override void Draw()
+	public override void Draw(int id)
 	{
 		bool openfolderdialog = false;
 		bool create = false;
 		bool isOpen = true;
 
-		ImGui.Begin(Title, ref isOpen);
+		ImGui.Begin($"{Title}##{id}", ref isOpen);
 
 		ImGui.InputText("Name", ref name, byte.MaxValue);
 

@@ -7,6 +7,11 @@ namespace BlinkLab.Editor.UI;
 
 public class StructureWindow : EditorWindow
 {
+	public StructureWindow()
+	{
+		Title = "Structure";
+	}
+
 	public class ChildElement
 	{
 		internal ChildElement(Entity entity)
@@ -72,10 +77,10 @@ public class StructureWindow : EditorWindow
 		ReloadStructure();
 	}
 
-	public override void Draw()
+	public override void Draw(int id)
 	{
 		bool open = true;
-		ImGui.Begin("Structure", ref open);
+		ImGui.Begin($"{Title}##{id}", ref open);
 		bool rclicked = ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Right) && !ImGui.IsAnyItemHovered();
 		if (rclicked)
 		{
