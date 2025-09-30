@@ -146,7 +146,7 @@ public class FileSelectDialog : EditorWindow
 	public override void Draw(int id)
 	{
 		bool isOpen = true;
-		ImGui.Begin($"{Title}##{id}", ref isOpen, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
+		Begin($"{Title}##{id}", ref isOpen, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
 		ImGui.PushItemWidth(-1f);
 		ImGui.InputText("###Path", ref path, byte.MaxValue, ImGuiInputTextFlags.ReadOnly);
 		ImGui.PopItemWidth();
@@ -298,6 +298,6 @@ public class FileSelectDialog : EditorWindow
 			Close();
 			AfterPrompt?.Invoke("", true);
 		}
-		ImGui.End();
+		End();
 	}
 }

@@ -17,7 +17,7 @@ public class ConsoleWindow : EditorWindow
 	{
 		bool open = true;
 
-		ImGui.Begin($"{Title}##{id}", ref open);
+		Begin($"{Title}##{id}", ref open);
 		if (ImGui.SmallButton("Clear"))
 		{
 			logger.Clear();
@@ -29,7 +29,7 @@ public class ConsoleWindow : EditorWindow
 			ImGui.TextColored(new(log.color.R, log.color.G, log.color.B, log.color.A), log.Text);
 		}
 		ImGui.EndChild();
-		ImGui.End();
+		End();
 
 		if (!open) { Close(); }
 	}

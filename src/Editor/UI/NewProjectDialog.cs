@@ -25,7 +25,7 @@ public class NewProjectDialog : EditorWindow
 		bool create = false;
 		bool isOpen = true;
 
-		ImGui.Begin($"{Title}##{id}", ref isOpen);
+		Begin($"{Title}##{id}", ref isOpen);
 
 		ImGui.InputText("Name", ref name, byte.MaxValue);
 
@@ -92,7 +92,7 @@ public class NewProjectDialog : EditorWindow
 			ImGui.TextColored(new(1, 0, 0, 1), message);
 		}
 
-		ImGui.End();
+		End();
 
 		if (openfolderdialog)
 		{

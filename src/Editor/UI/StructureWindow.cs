@@ -79,7 +79,7 @@ public class StructureWindow : EditorWindow
 	public override void Draw(int id)
 	{
 		bool open = true;
-		ImGui.Begin($"{Title}##{id}", ref open);
+		Begin($"{Title}##{id}", ref open);
 		bool rclicked = ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Right) && !ImGui.IsAnyItemHovered();
 		if (rclicked)
 		{
@@ -100,7 +100,7 @@ public class StructureWindow : EditorWindow
 			}
 			ImGui.EndPopup();
 		}
-		ImGui.End();
+		End();
 
 		if (!open) { Close(); }
 	}
