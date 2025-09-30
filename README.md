@@ -3,6 +3,8 @@
 
 A tool to quickly shape your game concepts.
 
+~~( i just wanted to make my own engine :) )~~
+
 ## Licenses
 
 BlinkLab is distributed under [MIT License](LICENSE), and uses these awesome libraries.
