@@ -8,8 +8,7 @@ public abstract class EditorWindow : IUIElements
 
 	public void Close()
 	{
-		if (manager == null) { throw new NullReferenceException(); }
-		manager.CloseWindow(this);
+		manager!.CloseWindow(this);
 	}
 
 	public void Draw() { Draw(-1); }
