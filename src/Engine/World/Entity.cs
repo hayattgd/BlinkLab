@@ -17,6 +17,7 @@ public class Entity(string name)
 	private Entity? _parent = Project.LoadedProject?.Root ?? null;
 
 	public event Action? Changed;
+	public event Action? OnDestroy;
 	public ReadOnlyCollection<Entity> Children => _children.AsReadOnly();
 	public int ChildrenCount => _children.Count;
 
@@ -26,6 +27,38 @@ public class Entity(string name)
 		_parent?.RemoveChild(this);
 		_parent = entity;
 		entity?.AddChild(this);
+		InvokeChanged();
+	}
+
+	public void Destroy()
+	{
+		Destroy(true);
+	}
+
+	private void Destroy(bool isroot)
+	{
+		if (isroot)
+		{
+			Parent.InvokeChangedAfterRemove(this);
+		}
+		_parent = null;
+		Changed = null;
+
+		Components.Clear();
+
+		foreach (var child in Children)
+		{
+			child.Destroy(false);
+		}
+		_children.Clear();
+
+		OnDestroy?.Invoke();
+		OnDestroy = null;
+	}
+
+	private void InvokeChangedAfterRemove(Entity entity)
+	{
+		RemoveChild(entity);
 		InvokeChanged();
 	}
 

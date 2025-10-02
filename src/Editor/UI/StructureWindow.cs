@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using BlinkLab.Engine.World;
 using ImGuiNET;
+using Microsoft.VisualBasic.FileIO;
 
 namespace BlinkLab.Editor.UI;
 
@@ -23,7 +24,9 @@ public class StructureWindow : EditorWindow
 		public Entity instance;
 	}
 
+	int lastId;
 	public ChildElement? selected;
+	private ChildElement? target;
 
 	public List<ChildElement> structure = [];
 
@@ -64,10 +67,44 @@ public class StructureWindow : EditorWindow
 
 	private void DrawElement(ChildElement element)
 	{
-		if (ImGui.TreeNode(element.instance.Name))
+		lastId++;
+		bool hovered = false;
+		if (ImGui.TreeNodeEx($"{element.instance.Name}##{lastId}", element.selected ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None))
 		{
+			hovered = ImGui.IsItemHovered();
+
 			DrawChildren(element.children.AsReadOnly());
 			ImGui.TreePop();
+		}
+		else
+		{
+			hovered = ImGui.IsItemHovered();
+		}
+
+		if (hovered && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+		{
+			element.selected = true;
+			selected = element;
+		}
+
+		if (hovered && ImGui.IsMouseReleased(ImGuiMouseButton.Right))
+		{
+			ImGui.OpenPopup("StructureMenu");
+			element.selected = true;
+			selected = element;
+			target = element;
+		}
+
+		if ((!hovered) && (!ImGui.IsWindowHovered()) && (!ImGui.IsAnyItemHovered()) && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+		{
+			element.selected = false;
+			selected = null;
+			target = null;
+		}
+
+		if (selected != element)
+		{
+			element.selected = false;
 		}
 	}
 
@@ -80,11 +117,13 @@ public class StructureWindow : EditorWindow
 	{
 		bool open = true;
 		Begin($"{Title}##{id}", ref open);
-		bool rclicked = ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Right) && !ImGui.IsAnyItemHovered();
+		bool rclicked = ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseReleased(ImGuiMouseButton.Right);
 		if (rclicked)
 		{
 			ImGui.OpenPopup("StructureMenu");
 		}
+
+		lastId = 0;
 
 		if (Application.IsProjectLoaded)
 		{
@@ -95,9 +134,10 @@ public class StructureWindow : EditorWindow
 		{
 			if (ImGui.BeginMenu("Create", Application.IsProjectLoaded))
 			{
-				if (ImGui.MenuItem("Empty")) { var e = new Entity("Empty"); e.SetParent(Application.Project?.Root!); }
+				if (ImGui.MenuItem("Empty")) { var e = new Entity("Empty"); e.SetParent(target?.instance ?? Application.Project?.Root!); }
 				ImGui.EndMenu();
 			}
+			if (ImGui.MenuItem("Delete", target != null)) { target?.instance.Destroy(); }
 			ImGui.EndPopup();
 		}
 		End();
